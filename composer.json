@@ -1,0 +1,35 @@
+{
+    "name": "bosconian-dynamics/xblio-auth",
+    "description": "A WordPress plugin enabling Xbox Live authentication and API requests by way of the https://xbl.io service.",
+    "type": "wordpress-plugin",
+    "license": "LGPL-2.1-or-later",
+    "authors": [
+        {
+            "name": "Adam Bosco",
+            "email": "github@adambos.co"
+        }
+    ],
+    "minimum-stability": "beta",
+    "autoload": {
+        "psr-4": {
+            "BosconianDynamics\\XblioAuth\\": "inc/"
+        }
+    },
+    "extra": {
+        "installer-paths": {
+            "vendor/{$vendor}/{$name}": ["type:wordpress-plugin"]
+        }
+    },
+    "repositories": [
+        {
+            "type": "vcs",
+            "url": "https://github.com/reduxframework/redux-framework-4"
+        }
+    ],
+    "require": {
+        "php": ">=7.2.0",
+        "composer/installers": "^1.9",
+        "php-di/php-di": "^6.2",
+        "reduxframework/redux-framework-4": "dev-master"
+    }
+}
