@@ -11,13 +11,34 @@
     ],
     "minimum-stability": "beta",
     "autoload": {
+        "classmap": ["build.php"],
         "psr-4": {
-            "BosconianDynamics\\XblioAuth\\": "inc/"
+            "BosconianDynamics\\XblioAuth\\": "inc/",
+            "BosconianDynamics\\XblioAuth\\Dependencies\\": "build/vendor/"
         }
+    },
+    "scripts": {
+        "post-install-cmd": [
+            "\"vendor/bin/mozart\" compose",
+            "composer dump-autoload",
+            "BosconianDynamics\\XblioAuth\\Build::copy_autoloaders"
+        ],
+        "post-update-cmd": [
+            "\"vendor/bin/mozart\" compose",
+            "composer dump-autoload",
+            "BosconianDynamics\\XblioAuth\\Build::copy_autoloaders"
+        ]
     },
     "extra": {
         "installer-paths": {
             "vendor/{$vendor}/{$name}": ["type:wordpress-plugin"]
+        },
+        "mozart": {
+            "dep_namespace": "BosconianDynamics\\XblioAuth\\Dependencies\\",
+            "dep_directory": "/build/vendor/",
+            "classmap_directory": "/build/classes/",
+            "classmap_prefix": "BDXA_",
+            "delete_vendor_directories": true
         }
     },
     "repositories": [
@@ -31,5 +52,8 @@
         "composer/installers": "^1.9",
         "php-di/php-di": "^6.2",
         "reduxframework/redux-framework-4": "dev-master"
+    },
+    "require-dev": {
+        "coenjacobs/mozart": "^0.6.0@beta"
     }
 }

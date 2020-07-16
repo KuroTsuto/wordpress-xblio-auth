@@ -30,7 +30,7 @@ Redux::set_args(
         //'admin_bar_icon'       => 'dashicons-controller',  // Choose an icon for the admin bar menu
         'admin_bar_priority'   => 10,                      // Choose an priority for the admin bar menu
         //'global_variable'      => 'bd_xblio_auth',         // Set a different name for your global variable other than the opt_name
-        'dev_mode'             => true,                    // Show the time the page took to load, etc
+        'dev_mode'             => defined('WP_DEBUG') && WP_DEBUG,                    // Show the time the page took to load, etc
         'update_notice'        => true,                    // If dev_mode is enabled, will notify developer of updated versions available in the GitHub Repo
         'customizer'           => false,                   // Enable basic customizer support
         //'open_expanded'        => true,                    // Allow you to start the panel in an expanded way initially.

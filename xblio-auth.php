@@ -1,22 +1,21 @@
 <?php
 /**
- * Plugin Name: XBL.io Authentication
+ * Plugin Name:       XBL.io Authentication
+ * Plugin URI:        https://github.com/bosconian-dynamics/wordpress-xblio-auth
  * Description:       Enables Xbox Live authentication and API requests by way of the https://xbl.io service.
- * Version:           0.0.1
+ * Version:           0.1.0
  * Requires at least: 5.2
  * Requires PHP:      7.2
  * Author:            Adam Bosco
- * Author URI:        https://adambos.co
  * License:           LGPL v2.1 or later
  */
 
-require_once 'vendor/autoload.php';
+require_once dirname( __FILE__ ) . '/build/autoload.php';
 
-//require_once 'vendor/reduxframework/redux-framework-4/redux-core/framework.php';
 if( !class_exists( 'ReduxFramework' ) )
-  require_once dirname( __FILE__ ) . '/vendor/reduxframework/redux-framework-4/redux-core/framework.php';
+  require_once dirname( __FILE__ ) . '/build/vendor/reduxframework/redux-framework-4/redux-core/framework.php';
 
-require_once 'config/options.php';
+require_once dirname( __FILE__ ) . '/config/options.php';
 
 use \DI\ContainerBuilder;
 
@@ -34,19 +33,22 @@ class XblioAuthPlugin {
   protected function __construct() {
     $this->dev_mode = defined( 'WP_DEBUG' ) && WP_DEBUG;
 
+    $container_cache_dir = __DIR__ . '/' . static::CONTAINER_CACHE_DIR;
+
     $builder = new ContainerBuilder();
     $builder->addDefinitions( __DIR__ . '/config/dependencies.php' );
 
     if( !$this->dev_mode ) {
-      $builder->enableCompilation( __DIR__ . '/' . static::CONTAINER_CACHE_DIR );
-      $builder->writeProxiesToFile( true, __DIR__ . '/' . static::CONTAINER_CACHE_DIR . '/proxies' );
+      $builder->enableCompilation( $container_cache_dir );
+      $builder->writeProxiesToFile( true, $container_cache_dir . '/proxies' );
+    }
+    else if( file_exists( $container_cache_dir ) ) {
+      rrmdir( $container_cache_dir );
     }
 
     $this->container  = $builder->build();
-
     $this->router     = $this->container->get( 'auth.router' );
     $this->provider   = $this->container->get( 'auth.provider.xblio' );
-    $this->auth       = $this->container->get( 'auth.controller' );
 
     $this->container
       ->get( 'route.auth_provider_action' )
@@ -69,18 +71,23 @@ class XblioAuthPlugin {
     \add_rewrite_tag( '%code%', '([^&])+' );
   }
 
+  /**
+   * Route authentication requests to the authentication controller.
+   */
   public function route_authentication( string $provider, string $action, \WP_Query $query ) {
-    // Only handle the xblio provider (for now...)
-    if( $provider !== $this->provider )
+    $strategy_name = 'auth.strategy.' . $provider;
+
+    // If don't have a strategy for the specified provider, bail.
+    if( !$this->container->has( $strategy_name ) )
       return;
     
-    // Load up the appropriate provider strategy
-    $this->auth->use( $this->container->get( 'auth.strategy.' . $provider ) );
+    $controller = $this->container->get( 'auth.controller' );
+    $controller->use( $this->container->get( $strategy_name ) ); // Load up the appropriate provider strategy
     
     if( $action === 'grant' || $action === 'callback' ) {
       $this->container->call(
         [
-          $this->auth,
+          $controller,
           'authenticate'
         ],
         [
@@ -90,6 +97,21 @@ class XblioAuthPlugin {
       );
     }
   }
+}
+
+function rrmdir($dir) { 
+  if (is_dir($dir)) { 
+    $objects = scandir($dir);
+    foreach ($objects as $object) { 
+      if ($object != "." && $object != "..") { 
+        if (is_dir($dir. DIRECTORY_SEPARATOR .$object) && !is_link($dir."/".$object))
+          rrmdir($dir. DIRECTORY_SEPARATOR .$object);
+        else
+          unlink($dir. DIRECTORY_SEPARATOR .$object); 
+      } 
+    }
+    rmdir($dir); 
+  } 
 }
 
 XblioAuthPlugin::getInstance();
