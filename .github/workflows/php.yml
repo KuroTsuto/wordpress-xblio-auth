@@ -15,7 +15,7 @@ jobs:
     - uses: actions/checkout@v2
 
     - name: Set up build directory skeleton
-      run: mkdir -b ${{ github.workspace }}/build/classes
+      run: mkdir -p ${{ github.workspace }}/build/classes
 
     - name: Validate composer.json and composer.lock
       run: composer validate
