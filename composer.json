@@ -2,6 +2,7 @@
     "name": "bosconian-dynamics/xblio-auth",
     "description": "A WordPress plugin enabling Xbox Live authentication and API requests by way of the https://xbl.io service.",
     "type": "wordpress-plugin",
+    "version": "0.1.0-dev",
     "license": "LGPL-2.1-or-later",
     "authors": [
         {
