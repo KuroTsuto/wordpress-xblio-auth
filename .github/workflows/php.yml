@@ -30,6 +30,10 @@ jobs:
       if: steps.composer-cache.outputs.cache-hit != 'true'
       run: composer install --prefer-dist --no-progress --no-suggest
     
+    - name: Post-install script on cached dependencies
+      if: steps.composer-cache.outputs.cache-hit == 'true'
+      run: composer run post-install-cmd
+    
     - name: Package plugin artifact
       uses: actions/upload-artifact@v2
       with:
