@@ -2,6 +2,11 @@
 namespace BosconianDynamics\XblioAuth;
 
 class Build {
+  static function create_classmap_dirs() {
+    if( !file_exists( __DIR__ . '/build/classes' ) )
+      mkdir( __DIR__ . '/build/classes', 0777, true );
+  }
+
   static function copy_autoloaders() {
     copy(
       __DIR__ . '/vendor/autoload.php',

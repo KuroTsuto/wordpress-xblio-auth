@@ -14,6 +14,9 @@ jobs:
     steps:
     - uses: actions/checkout@v2
 
+    - name: Set up build directory skeleton
+      run: mkdir -b ${{ github.workspace }}/build/classes
+
     - name: Validate composer.json and composer.lock
       run: composer validate
 
@@ -28,11 +31,10 @@ jobs:
 
     - name: Install dependencies
       if: steps.composer-cache.outputs.cache-hit != 'true'
-      run: composer install --prefer-dist --no-progress --no-suggest
+      run: composer install --prefer-dist --no-progress --no-suggest --no-scripts
     
-    - name: Post-install script on cached dependencies
-      if: steps.composer-cache.outputs.cache-hit == 'true'
-      run: composer run post-install-cmd
+    - name: Build
+      run: composer run build
     
     - name: Package plugin artifact
       uses: actions/upload-artifact@v2

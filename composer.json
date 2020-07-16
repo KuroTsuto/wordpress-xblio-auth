@@ -21,15 +21,16 @@
         }
     },
     "scripts": {
-        "post-install-cmd": [
+        "build": [
             "\"vendor/bin/mozart\" compose",
             "composer dump-autoload",
             "BosconianDynamics\\XblioAuth\\Build::copy_autoloaders"
         ],
+        "post-install-cmd": [
+            "@composer run build"
+        ],
         "post-update-cmd": [
-            "\"vendor/bin/mozart\" compose",
-            "composer dump-autoload",
-            "BosconianDynamics\\XblioAuth\\Build::copy_autoloaders"
+            "@composer run build"
         ]
     },
     "extra": {
