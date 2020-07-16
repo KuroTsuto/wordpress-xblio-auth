@@ -29,6 +29,15 @@ jobs:
     - name: Install dependencies
       if: steps.composer-cache.outputs.cache-hit != 'true'
       run: composer install --prefer-dist --no-progress --no-suggest
+    
+    - name: Package plugin artifact
+      uses: actions/upload-artifact@v2
+      with:
+        name: xblio-auth
+        path: |
+          /
+          !vendor/
+          !node_modules/
 
     # Add a test script to composer.json, for instance: "test": "vendor/bin/phpunit"
     # Docs: https://getcomposer.org/doc/articles/scripts.md
