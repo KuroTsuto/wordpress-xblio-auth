@@ -35,7 +35,8 @@ jobs:
       with:
         name: xblio-auth
         path: |
-          .
+          ./
+          build/
           !vendor/
           !node_modules/
 
