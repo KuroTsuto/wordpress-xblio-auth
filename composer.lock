@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "39750a5aed7f516a94d009143ec4a507",
+    "content-hash": "1e776fe7b0b2fc961d9b6708cab2ade8",
     "packages": [
         {
             "name": "composer/installers",
@@ -411,12 +411,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/reduxframework/redux-framework-4.git",
-                "reference": "65e80ff10313e4e76d30d398821bacc12886d4c8"
+                "reference": "0786e65401ca187a80e291016c1847c6523191bf"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/reduxframework/redux-framework-4/zipball/65e80ff10313e4e76d30d398821bacc12886d4c8",
-                "reference": "65e80ff10313e4e76d30d398821bacc12886d4c8",
+                "url": "https://api.github.com/repos/reduxframework/redux-framework-4/zipball/0786e65401ca187a80e291016c1847c6523191bf",
+                "reference": "0786e65401ca187a80e291016c1847c6523191bf",
                 "shasum": ""
             },
             "require": {
@@ -462,7 +462,7 @@
                 "forum": "https://wordpress.org/support/plugin/redux-framework/",
                 "source": "https://github.com/reduxframework/redux-framework-4/tree/master"
             },
-            "time": "2020-07-15T13:42:56+00:00"
+            "time": "2020-07-16T19:36:38+00:00"
         }
     ],
     "packages-dev": [
