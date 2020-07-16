@@ -11,7 +11,10 @@
     ],
     "minimum-stability": "beta",
     "autoload": {
-        "classmap": ["build.php"],
+        "classmap": [
+            "build.php",
+            "build/classes"
+        ],
         "psr-4": {
             "BosconianDynamics\\XblioAuth\\": "inc/",
             "BosconianDynamics\\XblioAuth\\Dependencies\\": "build/vendor/"
@@ -38,7 +41,7 @@
             "dep_directory": "/build/vendor/",
             "classmap_directory": "/build/classes/",
             "classmap_prefix": "BDXA_",
-            "delete_vendor_directories": true
+            "delete_vendor_directories": false
         }
     },
     "repositories": [
