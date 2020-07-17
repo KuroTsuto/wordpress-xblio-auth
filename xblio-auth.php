@@ -23,8 +23,9 @@ use \DI\ContainerBuilder;
 use function BosconianDynamics\XblioAuth\rrmdir;
 
 class XblioAuthPlugin {
-  const CONTAINER_CACHE_DIR = 'build/php-di';
-  const REDUX_OPTION_KEY    = 'bd_xblio_auth';
+  const CONTAINER_CACHE_DIR   = 'build/php-di';
+  const REDUX_OPTION_KEY      = 'bd_xblio_auth';
+  const USER_META_PROFILE_KEY = 'xblio_auth_profile';
 
   protected static $instance = null;
 
@@ -76,6 +77,18 @@ class XblioAuthPlugin {
     return static::$instance;
   }
 
+  public static function get_profile_field( string $key, $user_id = null ) {
+    if( !$user_id )
+      $user_id = get_current_user_id();
+    
+    if( !$user_id )
+      throw new WP_Error( 'No user specified' );
+    
+    $profile = \get_user_meta( $user_id, static::USER_META_PROFILE_KEY, true );
+
+    return $profile[ $key ];
+  }
+
   public function get_xbox_avatar_data( array $args, $id_or_email ) {
     if( !is_numeric( $id_or_email ) )
       return $args;
@@ -87,7 +100,7 @@ class XblioAuthPlugin {
       return $args;
     }
     
-    $args['url'] = \get_user_meta( $id_or_email, 'xblio_auth_profile', true )['avatar'];
+    $args['url'] = static::get_profile_field( 'avatar', $id_or_email );
     // TODO: set other avatar data args
 
     return $args;
@@ -115,7 +128,7 @@ class XblioAuthPlugin {
     \update_user_meta( $user_id, 'xblio_auth_app_key', $profile['app_key'] );
     \update_user_meta(
       $user_id,
-      'xblio_auth_profile',
+      static::USER_META_PROFILE_KEY,
       [
         'avatar'       => $profile['avatar'],
         'gamertag'     => $profile['gamertag'],
