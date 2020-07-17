@@ -2,7 +2,6 @@
     "name": "bosconian-dynamics/xblio-auth",
     "description": "A WordPress plugin enabling Xbox Live authentication and API requests by way of the https://xbl.io service.",
     "type": "wordpress-plugin",
-    "version": "0.1.0-dev",
     "license": "LGPL-2.1-or-later",
     "authors": [
         {
@@ -12,26 +11,22 @@
     ],
     "minimum-stability": "beta",
     "autoload": {
-        "classmap": [
-            "build.php",
-            "build/classes"
-        ],
+        "classmap": ["build.php"],
         "psr-4": {
             "BosconianDynamics\\XblioAuth\\": "inc/",
             "BosconianDynamics\\XblioAuth\\Dependencies\\": "build/vendor/"
         }
     },
     "scripts": {
-        "build": [
+        "post-install-cmd": [
             "\"vendor/bin/mozart\" compose",
             "composer dump-autoload",
             "BosconianDynamics\\XblioAuth\\Build::copy_autoloaders"
         ],
-        "post-install-cmd": [
-            "@composer run build"
-        ],
         "post-update-cmd": [
-            "@composer run build"
+            "\"vendor/bin/mozart\" compose",
+            "composer dump-autoload",
+            "BosconianDynamics\\XblioAuth\\Build::copy_autoloaders"
         ]
     },
     "extra": {
@@ -43,7 +38,7 @@
             "dep_directory": "/build/vendor/",
             "classmap_directory": "/build/classes/",
             "classmap_prefix": "BDXA_",
-            "delete_vendor_directories": false
+            "delete_vendor_directories": true
         }
     },
     "repositories": [
