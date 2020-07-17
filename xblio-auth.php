@@ -20,8 +20,11 @@ require_once __DIR__ . '/config/options.php';
 use BosconianDynamics\XblioAuth\IAuthStrategy;
 use \DI\ContainerBuilder;
 
+use function BosconianDynamics\XblioAuth\rrmdir;
+
 class XblioAuthPlugin {
   const CONTAINER_CACHE_DIR = 'build/php-di';
+  const REDUX_OPTION_KEY    = 'bd_xblio_auth';
 
   protected static $instance = null;
 
@@ -62,7 +65,11 @@ class XblioAuthPlugin {
     \add_filter( 'pre_get_avatar_data', [$this, 'get_xbox_avatar_data'], 10, 2 );
   }
 
-  public static function getInstance() {
+  public static function get_option( string $key, $default = null ) {
+    return Redux::get_option( static::REDUX_OPTION_KEY, $key, $default );
+  }
+
+  public static function get_instance() {
     if( !static::$instance )
       static::$instance = new static();
     
@@ -74,13 +81,14 @@ class XblioAuthPlugin {
       return $args;
     
     if(
-      !Redux::get_option( 'bd_xblio_auth', 'force_xbl_avatar' )
-      || !\get_user_meta( $id_or_email, 'xblio_auth_use_avatar', true )
+      !(bool) static::get_option( 'force_xbl_avatar' )
+      && !(bool) \get_user_meta( $id_or_email, 'xblio_auth_use_avatar', true )
     ) {
       return $args;
     }
     
     $args['url'] = \get_user_meta( $id_or_email, 'xblio_auth_profile', true )['avatar'];
+    // TODO: set other avatar data args
 
     return $args;
   }
@@ -120,7 +128,7 @@ class XblioAuthPlugin {
   }
 
   public function authentication_redirect() {
-    \wp_redirect( Redux::get_option( 'bd_xblio_auth', 'auth_success_redirect', '/' ) );
+    \wp_redirect( static::get_option( 'auth_success_redirect', '/' ) );
     exit;
   }
 
@@ -152,19 +160,4 @@ class XblioAuthPlugin {
   }
 }
 
-function rrmdir($dir) { 
-  if (is_dir($dir)) { 
-    $objects = scandir($dir);
-    foreach ($objects as $object) { 
-      if ($object != "." && $object != "..") { 
-        if (is_dir($dir. DIRECTORY_SEPARATOR .$object) && !is_link($dir."/".$object))
-          rrmdir($dir. DIRECTORY_SEPARATOR .$object);
-        else
-          unlink($dir. DIRECTORY_SEPARATOR .$object); 
-      } 
-    }
-    rmdir($dir); 
-  } 
-}
-
-XblioAuthPlugin::getInstance();
+XblioAuthPlugin::get_instance();
