@@ -85,6 +85,21 @@ Redux::set_section( $opt_name, [
             'subtitle' => __( 'From xbl.io custom app', 'redux-framework-demo' ),
             //'desc'     => __( 'Field Description', 'redux-framework-demo' ),
             'default'  => ''
+        ],
+        [
+            'id'       => 'force_xbl_avatar',
+            'type'     => 'checkbox',
+            'title'    => __( 'Force Xbox Live Avatar', 'redux-framework-demo' ),
+            'subtitle' => __( 'Replace user avatars with Xbox Live avatar if available', 'redux-framework-demo' ),
+            'default'  => '1'
+        ],
+        [
+            'id'       => 'auth_success_redirect',
+            'type'     => 'text',
+            'title'    => __( 'Auth Success Redirect', 'redux-framework-demo' ),
+            'subtitle' => __( 'URL to direct a user to on successful authentication', 'redux-framework-demo' ),
+            //'desc'     => __( 'Field Description', 'redux-framework-demo' ),
+            'default'  => '/'
         ]
     ]
  ] );

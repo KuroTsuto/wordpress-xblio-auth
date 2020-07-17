@@ -62,6 +62,8 @@ return [
 
   'auth.controller'            => create( AuthController::class ),
 
+  AuthController::class        => get( 'auth.controller' ),
+
   'auth.strategy.xblio'        => autowire( AuthStrategy::class )
     ->constructorParameter( 'public_key', get( 'options.xblio_public_key') )
     ->constructorParameter( 'auth_url', get( 'api.auth_url' ) )

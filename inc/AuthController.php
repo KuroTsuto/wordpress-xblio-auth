@@ -7,6 +7,7 @@ use WP_User;
 
 class AuthController {
   const META_KEY_STRAT_ID_PREFIX = 'xblio_auth_';
+  const ACTION_PREFIX = 'xblio_auth_';
 
   protected $strategies = [];
 
@@ -89,5 +90,32 @@ class AuthController {
       static::META_KEY_STRAT_ID_PREFIX . $strategy_id . '_id',
       $value
     );
+  }
+
+  public function success( IAuthStrategy $strategy, \WP_User $user, array $profile ) {
+    if( !\is_user_logged_in() ) {
+      \wp_set_auth_cookie( $user->ID, true );
+      \wp_set_current_user( $user->ID );
+      
+      \do_action( static::ACTION_PREFIX . 'login_success', $user, $profile, $strategy );
+    }
+    else {
+      \do_action( static::ACTION_PREFIX . 'connect_success', $user, $profile, $strategy );
+    }
+
+    \do_action( static::ACTION_PREFIX . 'auth_success', $user, $profile, $strategy );
+  }
+
+  public function fail( IAuthStrategy $strategy, $challenge, $status = 401 ) {
+
+  }
+
+  public function redirect( $url, $status = 302 ) {
+    \wp_redirect( $url, $status );
+    exit;
+  }
+
+  public function error( IAuthStrategy $strategy, $err ) {
+
   }
 }

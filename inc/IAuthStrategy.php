@@ -2,7 +2,7 @@
 namespace BosconianDynamics\XblioAuth;
 
 interface IAuthStrategy {
-  public function authenticate( \WP_Query $query, array $options );
+  public function authenticate( \WP_Query $query, array $options = [] );
 
   public function get_id() : string;
 
