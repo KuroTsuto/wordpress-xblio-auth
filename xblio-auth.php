@@ -79,12 +79,15 @@ class XblioAuthPlugin {
 
   public static function get_profile_field( string $key, $user_id = null ) {
     if( !$user_id )
-      $user_id = get_current_user_id();
+      $user_id = \get_current_user_id();
     
     if( !$user_id )
       throw new WP_Error( 'No user specified' );
     
     $profile = \get_user_meta( $user_id, static::USER_META_PROFILE_KEY, true );
+
+    if( !$profile )
+      return false;
 
     return $profile[ $key ];
   }
