@@ -1,9 +1,7 @@
 <?php
-namespace BosconianDynamics\XblioAuth\Xblio;
+namespace BosconianDynamics\XblioAuth\Xblio\API;
 
-use BosconianDynamics\XblioAuth\Xblio\User;
-
-class APIClient {
+class Client {
   const OPTION_KEY_RATELIMIT    = 'xblio-auth-ratelimit-remaining';
 
   private $public_key;
@@ -25,25 +23,6 @@ class APIClient {
   public function authenticate() : void {
     \wp_redirect( static::$auth_url . '/' . self::$public_key );
     exit;
-  }
-
-  public function get_user() {
-    if( $this->user instanceof User )
-      return $this->user;
-    
-    if( \is_user_logged_in() ) {
-      $wp_user_id = \get_current_user_id();
-
-      $xuid    = \get_user_meta( $wp_user_id, 'xblio-auth-xuid', true );
-      $app_key = \get_user_meta( $wp_user_id, 'xblio-auth-app_key', true );
-      
-      if( isset($xuid) && isset($app_key) ) {
-        $this->user = new User( $xuid, $app_key, [] );
-      }
-    }
-    else {
-
-    }
   }
 
   public function request_user_auth_token( string $code ) {

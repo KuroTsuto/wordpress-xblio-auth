@@ -3,7 +3,7 @@ namespace BosconianDynamics\XblioAuth\Xblio;
 
 use BosconianDynamics\XblioAuth\IAuthStrategy;
 use BosconianDynamics\XblioAuth\AuthController;
-use BosconianDynamics\XblioAuth\Xblio\APIClient;
+use BosconianDynamics\XblioAuth\Xblio\API\Client;
 use WP_Error;
 
 class AuthStrategy implements IAuthStrategy {
@@ -18,7 +18,7 @@ class AuthStrategy implements IAuthStrategy {
   protected $public_key;
   protected $controller;
 
-  public function __construct( AuthController $controller, APIClient $api_client, string $public_key, string $auth_url, string $token_url, callable $verify ) {
+  public function __construct( AuthController $controller, Client $api_client, string $public_key, string $auth_url, string $token_url, callable $verify ) {
     $this->controller = $controller;
     $this->api_client = $api_client;
     $this->public_key = $public_key;

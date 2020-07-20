@@ -5,11 +5,11 @@ use function DI\create;
 use function DI\get;
 use function DI\autowire;
 
-use BosconianDynamics\XblioAuth\Xblio\APIClient;
+use BosconianDynamics\XblioAuth\Xblio\API\Client;
+use BosconianDynamics\XblioAuth\Xblio\AuthStrategy;
 use BosconianDynamics\XblioAuth\AuthController;
 use BosconianDynamics\XblioAuth\Route;
 use BosconianDynamics\XblioAuth\Router;
-use BosconianDynamics\XblioAuth\Xblio\AuthStrategy;
 use Psr\Container\ContainerInterface;
 
 return [
@@ -18,7 +18,7 @@ return [
   'api.auth_url'               => DI\string( 'https://{api.host}/app/auth' ),
   'api.token_url'              => DI\string( 'https://{api.host}/app/claim' ),
 
-  APIClient::class             => create( APIClient::class )
+  Client::class                => create( Client::class )
     ->constructor(
       get( 'options.xblio_public_key' ),
       [
