@@ -11,6 +11,7 @@
     ],
     "minimum-stability": "beta",
     "autoload": {
+        "files": ["inc/util.php"],
         "classmap": ["build.php"],
         "psr-4": {
             "BosconianDynamics\\XblioAuth\\": "inc/"

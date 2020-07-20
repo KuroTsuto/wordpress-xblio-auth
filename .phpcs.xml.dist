@@ -49,6 +49,7 @@
 		<exclude name="WordPress.Arrays.ArrayIndentation.ItemNotAligned" />
 		<exclude name="WordPress.PHP.YodaConditions" />
 		<exclude name="WordPress.Files.FileName.InvalidClassFileName" />
+		<exclude name="WordPress.Files.FileName.NotHyphenatedLowercase" />
 		<exclude name="WordPress.WhiteSpace.ControlStructureSpacing.NoSpaceAfterStructureOpen" />
 		<exclude name="WordPress.WhiteSpace.PrecisionAlignment" />
 	</rule>
