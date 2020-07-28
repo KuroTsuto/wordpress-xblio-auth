@@ -5,8 +5,7 @@ use function DI\create;
 use function DI\get;
 use function DI\autowire;
 
-use BosconianDynamics\XblioAuth\Xblio\API\Client;
-use BosconianDynamics\XblioAuth\Xblio\AuthStrategy;
+use \BosconianDynamics\XblioAuth\Xblio;
 use BosconianDynamics\XblioAuth\AuthController;
 use BosconianDynamics\XblioAuth\Route;
 use BosconianDynamics\XblioAuth\Router;
@@ -18,7 +17,11 @@ return [
   'api.auth_url'               => DI\string( 'https://{api.host}/app/auth' ),
   'api.token_url'              => DI\string( 'https://{api.host}/app/claim' ),
 
-  Client::class                => create( Client::class )
+  'api.service.account'        => autowire( Xblio\API\Services\Account::class ),
+  'api.service.achievements'   => autowire( Xblio\API\Services\Achievements::class ),
+  'api.service.friends'        => autowire( Xblio\API\Services\Friends::class ),  
+
+  Xblio\API\Client::class                => create( Xblio\API\Client::class )
     ->constructor(
       get( 'options.xblio_public_key' ),
       [
@@ -64,7 +67,7 @@ return [
 
   AuthController::class        => get( 'auth.controller' ),
 
-  'auth.strategy.xblio'        => autowire( AuthStrategy::class )
+  'auth.strategy.xblio'        => autowire( Xblio\AuthStrategy::class )
     ->constructorParameter( 'public_key', get( 'options.xblio_public_key') )
     ->constructorParameter( 'auth_url', get( 'api.auth_url' ) )
     ->constructorParameter( 'token_url', get( 'api.token_url' ) )

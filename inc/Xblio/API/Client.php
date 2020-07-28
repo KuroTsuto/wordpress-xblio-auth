@@ -4,14 +4,14 @@ namespace BosconianDynamics\XblioAuth\Xblio\API;
 class Client {
   const OPTION_KEY_RATELIMIT    = 'xblio-auth-ratelimit-remaining';
 
-  private $public_key;
-
   protected $rate_available = null;
-  protected $app_key     = null;
+  protected $app_key        = null;
+  protected $public_key;
   protected $api_url;
   protected $token_url;
   protected $auth_url;
   protected $user;
+  protected $commands;
 
   public function __construct( string $public_key, array $urls ) {
     $this->public_key = $public_key;
@@ -21,7 +21,7 @@ class Client {
   }
 
   public function authenticate() : void {
-    \wp_redirect( static::$auth_url . '/' . self::$public_key );
+    \wp_redirect( $this->auth_url . '/' . $this->public_key );
     exit;
   }
 
@@ -49,10 +49,17 @@ class Client {
     // TODO: this. better.
   }
 
-  public function request( string $endpoint, string $method, array $data, array $options ) {
-    $url = strpos($endpoint, 'http') === false
-      ? static::$api_url . '/' . $endpoint
+  public function request( string $endpoint, string $method, array $data = [], array $options = [] ) {
+    $url = strpos($endpoint, 'http') !== 0
+      ? $this->api_url . '/' . $endpoint
       : $endpoint;
+    
+    $auth = $this->public_key;
+
+    if( isset( $options['app_key'] ) )
+      $auth = $options['app_key'];
+    elseif( isset( $this->app_key ) )
+      $auth = $this->app_key;
     
     $options = wp_parse_args(
       $options,
@@ -62,7 +69,7 @@ class Client {
         'blocking' => true,
         'method'   => $method,
         'headers'  => [
-          'X-Authorization' => isset( $options['app_key'] ) ? $options['app_key'] : $this->public_key,
+          'X-Authorization' => $auth,
           'X-Contract'      => '100',
           'Content-Type'    => 'application/json'
         ]
@@ -91,6 +98,10 @@ class Client {
     }
 
     return $this->parse_response( $response );
+  }
+
+  public function set_app_key( string $app_key ) {
+    $this->app_key = $app_key;
   }
 
   protected function set_rate_remaining( int $remaining ) {
